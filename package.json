@@ -1,0 +1,24 @@
+{
+  "name": "supertable",
+  "version": "0.0.1",
+  "description": "React table component",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://atridgedcosta@github.com/bigdatr/supertable.git"
+  },
+  "keywords": [
+    "react",
+    "table",
+    "performance"
+  ],
+  "author": "Atridge D'Costa",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/bigdatr/supertable/issues"
+  },
+  "homepage": "https://github.com/bigdatr/supertable"
+}
