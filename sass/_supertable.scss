@@ -1,0 +1,42 @@
+.supertable {
+    .group:before,
+    .group:after { content:""; display:table; }
+    .group:after { clear:both;}
+    .group { zoom:1; /* For IE 6/7 */ }
+
+    .supertable-row {
+        clear: both;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .supertable-column {
+        display: block;
+        float:left;
+        margin: 1% 0 1% 0%;
+    }
+
+    .supertable-column:first-child {
+        margin-left: 0;
+    }
+
+    .supertable-header {
+        text-transform: uppercase;
+        font-weight: 500;
+        border-bottom: #e6e6e6 1px solid;
+        background-color: #e6e6e6;
+    }
+
+    .supertable-content {
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .supertable-datarow {
+        border-bottom: #e6e6e6 1px solid;
+    }
+
+    .supertable-datarow--even {
+        background-color: #fafafa;
+    }
+}

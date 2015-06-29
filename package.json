@@ -2,7 +2,7 @@
   "name": "supertable",
   "version": "0.0.1",
   "description": "React table component",
-  "main": "index.js",
+  "main": "supertable.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/bigdatr/supertable/issues"
   },
-  "homepage": "https://github.com/bigdatr/supertable"
+  "homepage": "https://github.com/bigdatr/supertable",
+  "dependencies": {
+    "jsx-loader": "^0.13.2",
+    "react": "^0.13.3"
+  }
 }
