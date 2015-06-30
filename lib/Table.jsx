@@ -4,6 +4,7 @@ var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 var Row = require('./Row');
 var Column = require('./Column');
 var DataRow = require('./DataRow');
+var Toolbar = require('./Toolbar');
 
 var Table = React.createClass({
     displayName: 'Table',
@@ -56,11 +57,16 @@ var Table = React.createClass({
         var _fields = this.getFields();
 
         return (
-            <div className="supertable" style={styles.container}>
-                <Row className="supertable-header">{this.renderColumnHeaders(_fields)}</Row>
+            <div className="supertable-container">
+                <Toolbar />
+                <div className="supertable">
+                    <div className="supertable-wrapper" style={styles.container}>
+                        <Row className="supertable-header">{this.renderColumnHeaders(_fields)}</Row>
 
-                <div className="supertable-content" style={styles.content}>
-                    {this.renderDataRows(_fields)}
+                        <div className="supertable-content" style={styles.content}>
+                            {this.renderDataRows(_fields)}
+                        </div>
+                    </div>
                 </div>
             </div>
         );

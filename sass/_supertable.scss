@@ -1,8 +1,11 @@
-.supertable {
+.supertable-container {
     .group:before,
     .group:after { content:""; display:table; }
     .group:after { clear:both;}
     .group { zoom:1; /* For IE 6/7 */ }
+
+
+    overflow: scroll;
 
     .supertable-row {
         clear: both;
@@ -13,7 +16,9 @@
     .supertable-column {
         display: block;
         float:left;
-        margin: 1% 0 1% 0%;
+        margin: 5px 0 5px 0;
+
+        padding: 5px;
     }
 
     .supertable-column:first-child {
@@ -38,5 +43,9 @@
 
     .supertable-datarow--even {
         background-color: #fafafa;
+    }
+
+    .supertable-toolbar {
+        float: right;
     }
 }
