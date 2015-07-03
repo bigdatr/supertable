@@ -27,17 +27,9 @@ var someFakeData = Immutable.fromJS([
 ]);
 
 var MyDataTable = React.createClass({
-    _rowGetter(row) {
-        return [
-            row.get('fieldA'),
-            row.get('fieldB'),
-            row.get('fieldC')
-        ];
-    },
     render() {
         return (
             <Table  data={someFakeData}
-                    rowGetter={this._rowGetter}
                     width={1000}
                     height={500}
                     fields={fields} />
