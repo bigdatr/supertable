@@ -34,9 +34,10 @@ var DataRow = React.createClass({
         var rowData = this.props.rowData;
         return this.props.fields
                         .map((f, i) => {
-                            var raw = rowData.get(f.get('name'));
+                            var fieldName = f.get('name');
+                            var raw = rowData.get(fieldName);
 
-                            var val = _this.props.cellRenderer ? _this.props.cellRenderer(raw, i, rowData) : raw;
+                            var val = _this.props.cellRenderer ? _this.props.cellRenderer(raw, fieldName, rowData) : raw;
                             var cellWidth = typeof _this.props.cellWidth === 'function' ? _this.props.cellWidth(i) : _this.props.cellWidth;
 
                             return <Cell key={i} width={cellWidth} label={val} />;
