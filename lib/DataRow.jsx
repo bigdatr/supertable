@@ -2,13 +2,14 @@ var React = require('react');
 var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 
 var Row = require('./Row');
-var Column = require('./Column');
+var Cell = require('./Cell');
 
 var DataRow = React.createClass({
     displayName: 'DataRow',
     propTypes: {
         rowIndex: React.PropTypes.number,
         rowData: React.PropTypes.object.isRequired,
+        fields: React.PropTypes.object.isRequired,
         cellWidth: React.PropTypes.oneOfType([
             React.PropTypes.number,
             React.PropTypes.func
@@ -19,15 +20,6 @@ var DataRow = React.createClass({
         PureRenderMixin
     ],
     render() {
-        var _this = this;
-
-        var cells = this.props.rowData.map((r, i) => {
-            var val = _this.props.cellRenderer ? _this.props.cellRenderer(r, i) : r;
-            var cellWidth = typeof _this.props.cellWidth === 'function' ? _this.props.cellWidth(i) : _this.props.cellWidth;
-
-            return _this.renderCell(val, i, cellWidth);
-        });
-
         var className = 'supertable-datarow';
 
         if (this.props.rowIndex) {
@@ -35,12 +27,20 @@ var DataRow = React.createClass({
             className += ' supertable-datarow--' + zebra;
         }
 
-        return <Row className={className}>{cells}</Row>;
+        return <Row className={className}>{this.renderCells()}</Row>;
     },
-    renderCell(label, key, cellWidth) {
-        return (
-            <Column key={key} width={cellWidth} label={label} />
-        );
+    renderCells() {
+        var _this = this;
+        var rowData = this.props.rowData;
+        return this.props.fields
+                        .map((f, i) => {
+                            var raw = rowData.get(f.get('name'));
+
+                            var val = _this.props.cellRenderer ? _this.props.cellRenderer(raw, i, rowData) : raw;
+                            var cellWidth = typeof _this.props.cellWidth === 'function' ? _this.props.cellWidth(i) : _this.props.cellWidth;
+
+                            return <Cell key={i} width={cellWidth} label={val} />;
+                        });
     }
 });
 

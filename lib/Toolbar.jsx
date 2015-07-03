@@ -6,10 +6,14 @@ var Toolbar = React.createClass({
     mixins: [
         PureRenderMixin
     ],
+    onExportToCSV() {
+        console.debug('supertable::Toolbar', 'Build export feature!');
+        alert('Build export feature!');
+    },
     render() {
         return (
             <div className="supertable-toolbar">
-                THiS iS WheRe i WiLL aDD tHe toOlBar...
+                <button onClick={this.onExportToCSV}>[Export to CSV]</button>
             </div>
         );
     }
