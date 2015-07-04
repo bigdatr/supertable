@@ -13,17 +13,28 @@ var Table = React.createClass({
     displayName: 'Table',
     propTypes: {
         data: React.PropTypes.object,
-        cellRenderer: React.PropTypes.func,
+        cellRenderer: React.PropTypes.object,
         width: React.PropTypes.number.isRequired,
         height: React.PropTypes.number.isRequired,
-        fields: React.PropTypes.object.isRequired
+        fields: React.PropTypes.object.isRequired,
+        
+        pagination: React.PropTypes.bool,
+        pageSize: React.PropTypes.number
     },
     mixins: [
         PureRenderMixin
     ],
+    getDefaultProps: function () {
+        return {
+            pagination: true,
+            pageSize: 100
+        };
+    },
     getInitialState: function () {
         return {
-            filters: Immutable.List()  
+            filters: Immutable.List(),
+
+            currentPage: 1
         };
     },
     getCellWidth(fields, fieldIndex) {
@@ -45,6 +56,15 @@ var Table = React.createClass({
         this.state.filters.forEach(f => {
             data = FilterUtils(data, f);
         });
+
+        return data;
+    },
+    getPagedData(data) {
+        // Apply pagination
+        if (this.props.pagination) {
+            var skip = (this.state.currentPage-1) * this.props.pageSize;
+            data = data.skip(skip).take(this.props.pageSize);
+        }
 
         return data;
     },
@@ -72,6 +92,9 @@ var Table = React.createClass({
 
         return nextWidth;
     },
+    onPageRequested(nextPage) {
+        this.setState({currentPage: nextPage});
+    },
     render() {
         var styles = {
             container: {
@@ -86,21 +109,27 @@ var Table = React.createClass({
         };
 
         var _fields = this.getFields();
+        var _data = this.getData();
 
         return (
             <div className="supertable-container">
-                <Toolbar />
+                {this.renderToolbar(_data)}
                 <div className="supertable" style={styles.container}>
                     <div className="supertable-wrapper" style={styles.wrapper}>
                         <Row className="supertable-header">{this.renderColumnHeaders(_fields)}</Row>
 
                         <div className="supertable-content" style={styles.content}>
-                            {this.renderDataRows(_fields)}
+                            {this.renderDataRows(_fields, _data)}
                         </div>
                     </div>
                 </div>
             </div>
         );
+    },
+    renderToolbar(data) {
+        var _totalPages = Math.ceil(data.size / this.props.pageSize);
+
+        return <Toolbar currentPage={this.state.currentPage} totalPages={_totalPages} onPageRequested={this.onPageRequested} />;
     },
     renderColumnHeaders(fields) {
         var _this = this;
@@ -111,17 +140,17 @@ var Table = React.createClass({
             return <ColumnHeader key={f.get('name')} label={f.get('label') || ''} width={width} onFilter={_this.onFilter.bind(_this, f)} />;
         });
     },
-    renderDataRows(fields) {
+    renderDataRows(fields, data) {
         var _this = this;
 
-        return this.getData().map((d, i) => {
-            return <DataRow     key={d.get('_id')}
+        return this.getPagedData(data).map((d, i) => {
+            return <DataRow     key={i}
                                 rowIndex={i}
                                 rowData={d}
                                 fields={fields}
                                 cellWidth={_this.getCellWidth.bind(_this, fields)}
                                 cellRenderer={this.props.cellRenderer} />;
-        });
+        }).toJS();
     }
 });
 

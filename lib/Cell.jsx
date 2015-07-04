@@ -19,7 +19,16 @@ var Cell = React.createClass({
             return true;
         }
 
-        return false;  
+        var type = typeof nextProps.label;
+
+        // Only compare strings or numbers, ignore objects
+        if (type === 'string' || type === 'number') {
+            if (nextProps.label !== this.props.label) {
+                return true;
+            }
+        }
+
+        return false;
     },
     render() {
         var styles = {

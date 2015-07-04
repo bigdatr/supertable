@@ -2,7 +2,6 @@ var React = require('react');
 var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 
 var Row = require('./Row');
-var Cell = require('./Cell');
 
 var DataRow = React.createClass({
     displayName: 'DataRow',
@@ -14,11 +13,16 @@ var DataRow = React.createClass({
             React.PropTypes.number,
             React.PropTypes.func
         ]).isRequired,
-        cellRenderer: React.PropTypes.func
+        cellRenderer: React.PropTypes.object
     },
     mixins: [
         PureRenderMixin
     ],
+    getDefaultProps: function () {
+        return {
+            cellRenderer: {}  
+        };
+    },
     render() {
         var className = 'supertable-datarow';
 
@@ -27,20 +31,30 @@ var DataRow = React.createClass({
             className += ' supertable-datarow--' + zebra;
         }
 
-        return <Row className={className}>{this.renderCells()}</Row>;
+        var cells = this.renderCells();
+        var row = <Row className={className}>{cells}</Row>;
+
+        return row;
     },
     renderCells() {
         var _this = this;
         var rowData = this.props.rowData;
+        var cellRenderer = this.props.cellRenderer;
+
         return this.props.fields
                         .map((f, i) => {
                             var fieldName = f.get('name');
                             var raw = rowData.get(fieldName);
-
-                            var val = _this.props.cellRenderer ? _this.props.cellRenderer(raw, fieldName, rowData) : raw;
+                            var val = cellRenderer.has(fieldName) ? cellRenderer.get(fieldName)(rowData) : raw;
                             var cellWidth = typeof _this.props.cellWidth === 'function' ? _this.props.cellWidth(i) : _this.props.cellWidth;
 
-                            return <Cell key={i} width={cellWidth} label={val} />;
+                            var cell = (
+                                <div key={i} className="supertable-cell" style={{width: cellWidth}}>
+                                    {val}
+                                </div>
+                            );
+
+                            return cell;
                         });
     }
 });
