@@ -1,5 +1,4 @@
 var React = require('react');
-// var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 
 var Cell = React.createClass({
     displayName: 'Cell',
@@ -11,9 +10,6 @@ var Cell = React.createClass({
             React.PropTypes.number
         ])
     },
-    // mixins: [
-    //     PureRenderMixin
-    // ],
     shouldComponentUpdate: function (nextProps, nextState) {
         if (nextProps.width !== this.props.width) {
             return true;
@@ -30,7 +26,7 @@ var Cell = React.createClass({
 
         return false;
     },
-    render() {
+    render: function() {
         var styles = {
             col: {
                 width: this.props.width
