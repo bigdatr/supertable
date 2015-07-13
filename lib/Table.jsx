@@ -1,47 +1,44 @@
-var React = require('react');
-var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
-var Immutable = require('immutable');
+const React = require('react');
+const Immutable = require('immutable');
 
-var Row = require('./Row');
-var ColumnHeader = require('./ColumnHeader');
-var DataRow = require('./DataRow');
-var Toolbar = require('./Toolbar');
+const Row = require('./Row');
+const ColumnHeader = require('./ColumnHeader');
+const DataRow = require('./DataRow');
+const Loader = require('./Loader');
 
-var FilterUtils = require('./utils/FilterUtils');
-
-var Table = React.createClass({
+const Table = React.createClass({
     displayName: 'Table',
     propTypes: {
         data: React.PropTypes.object,
         cellRenderer: React.PropTypes.object,
         width: React.PropTypes.number.isRequired,
         height: React.PropTypes.number.isRequired,
-        fields: React.PropTypes.object.isRequired,
-        
-        pagination: React.PropTypes.bool,
-        pageSize: React.PropTypes.number
+        fields: React.PropTypes.object.isRequired
     },
     mixins: [
-        PureRenderMixin
+        React.addons.PureRenderMixin
     ],
-    getDefaultProps: function () {
+    getInitialState() {
         return {
-            pagination: true,
-            pageSize: 100
+            filters: Immutable.List()
         };
     },
-    getInitialState: function () {
-        return {
-            filters: Immutable.List(),
+    onFilter(field, filter) {
+        const f = Immutable.Map({
+            field: field.get('name'),
+            operator: filter.operator,
+            value: filter.value
+        });
 
-            currentPage: 1
-        };
+        const nextFilters = Immutable.List().push(f);
+
+        this.setState({filters: nextFilters});
     },
     getCellWidth(fields, fieldIndex) {
-        var f = fields.get(fieldIndex);
-        var flexGrow = f.get('flexGrow') || 1;
-        var cellWidth = this.props.width / fields.size;
-        var width = cellWidth * flexGrow;
+        const f = fields.get(fieldIndex);
+        const flexGrow = f.get('flexGrow') || 1;
+        const cellWidth = this.props.width / fields.size;
+        const width = cellWidth * flexGrow;
 
         return width;
     },
@@ -49,107 +46,74 @@ var Table = React.createClass({
         // TODO: Apply any column filters to add/remove fields from display
         return this.props.fields;
     },
-    getData() {
-        var data = this.props.data;
-        
-        // Apply the data filters
-        this.state.filters.forEach(f => {
-            data = FilterUtils(data, f);
-        });
-
-        return data;
-    },
-    getPagedData(data) {
-        // Apply pagination
-        if (this.props.pagination) {
-            var skip = (this.state.currentPage-1) * this.props.pageSize;
-            data = data.skip(skip).take(this.props.pageSize);
-        }
-
-        return data;
-    },
-    onFilter(field, filter) {
-        var f = Immutable.Map({
-            field: field.get('name'),
-            operator: filter.operator,
-            value: filter.value
-        });
-
-        var nextFilters = Immutable.List().push(f);
-
-        this.setState({filters: nextFilters});
-    },
-    calcContainerWidth(w) {
-        var totalFields = this.props.fields.size;
-        var totalFlexGrow = 0;
+    getContainerWidth(w) {
+        const totalFields = this.props.fields.size;
+        let totalFlexGrow = 0;
 
         this.props.fields.forEach(f => {
-            var fg = f.get('flexGrow') || 1;
+            const fg = f.get('flexGrow') || 1;
             totalFlexGrow += fg;
         });
 
-        var nextWidth = (w/totalFields) * totalFlexGrow;
+        const nextWidth = (w / totalFields) * totalFlexGrow;
 
         return nextWidth;
     },
-    onPageRequested(nextPage) {
-        this.setState({currentPage: nextPage});
-    },
     render() {
-        var styles = {
+        const styles = {
             container: {
                 width: this.props.width
             },
             wrapper: {
-                width: this.calcContainerWidth(this.props.width)
+                width: this.getContainerWidth(this.props.width)
             },
             content: {
                 height: this.props.height
             }
         };
 
-        var _fields = this.getFields();
-        var _data = this.getData();
+        const _fields = this.getFields();
 
         return (
             <div className="supertable-container">
-                {this.renderToolbar(_data)}
                 <div className="supertable" style={styles.container}>
                     <div className="supertable-wrapper" style={styles.wrapper}>
                         <Row className="supertable-header">{this.renderColumnHeaders(_fields)}</Row>
 
                         <div className="supertable-content" style={styles.content}>
-                            {this.renderDataRows(_fields, _data)}
+                            {this.renderDataRows(_fields)}
                         </div>
                     </div>
                 </div>
             </div>
         );
     },
-    renderToolbar(data) {
-        var _totalPages = Math.ceil(data.size / this.props.pageSize);
-
-        return <Toolbar currentPage={this.state.currentPage} totalPages={_totalPages} onPageRequested={this.onPageRequested} />;
-    },
     renderColumnHeaders(fields) {
-        var _this = this;
+        const _this = this;
 
         return fields.map((f, i) => {
-            var width = _this.getCellWidth(fields, i);
+            const width = _this.getCellWidth(fields, i);
 
             return <ColumnHeader key={f.get('name')} label={f.get('label') || ''} width={width} onFilter={_this.onFilter.bind(_this, f)} />;
         });
     },
-    renderDataRows(fields, data) {
-        var _this = this;
+    renderDataRows(fields) {
+        const _this = this;
+        const {data, cellRenderer} = this.props;
 
-        return this.getPagedData(data).map((d, i) => {
-            return <DataRow     key={i}
-                                rowIndex={i}
-                                rowData={d}
-                                fields={fields}
-                                cellWidth={_this.getCellWidth.bind(_this, fields)}
-                                cellRenderer={this.props.cellRenderer} />;
+        if (!data) {
+            return <Loader />;
+        }
+
+        return data.map((d, i) => {
+            return (
+                <DataRow key={i}
+                        rowIndex={i}
+                        rowData={d}
+                        fields={fields}
+                        cellWidth={_this.getCellWidth.bind(_this, fields)}
+                        cellRenderer={cellRenderer} />
+            );
         }).toJS();
     }
 });

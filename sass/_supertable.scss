@@ -1,8 +1,8 @@
 @import 'FilterMenu';
-@import 'Paginator';
+@import 'Loader';
 
 .supertable-container {
-    overflow: scroll;
+    overflow: scroll-y;
 
     .supertable {
         .group:before,
@@ -46,10 +46,6 @@
 
         .supertable-datarow--even {
             background-color: #fafafa;
-        }
-
-        .supertable-toolbar {
-            float: right;
         }
     }
 }

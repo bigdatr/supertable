@@ -33,7 +33,7 @@ var ColumnHeader = React.createClass({
         return (
             <div>
                 {this.props.label}
-                <FilterMenu onChange={this.props.onFilter}/>
+                <FilterMenu onChange={this.props.onFilter} />
             </div>
         );
     }

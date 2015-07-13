@@ -1,38 +1,42 @@
-var React = require('react');
-var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
+const React = require('react');
 
-var FilterMenu = React.createClass({
-    displayName: 'FilterMenu',
-    propTypes: {
-        onChange: React.PropTypes.func.isRequired
-    },
-    mixins: [
-        PureRenderMixin
-    ],
-    getInitialState: function () {
-        return {
-            visible: false  
+class FilterMenu extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            visible: false
         };
-    },
-    onShow() {
-        this.setState({visible: true});
-    },
+
+        this.shouldComponentUpdate = React.addons.PureRenderMixin.shouldComponentUpdate.bind(this);
+
+        // Autobinding
+        this.onToggleMenu = this.onToggleMenu.bind(this);
+        this.onTextSearch = this.onTextSearch.bind(this);
+    }
+
+    onToggleMenu() {
+        this.setState({visible: !this.state.visible});
+    }
+
     onTextSearch() {
-        var value = this.refs.textFilter.getDOMNode().value;
+        const value = this.refs.textFilter.getDOMNode().value;
 
         this.props.onChange({
             operator: 'contains',
             value: value
         });
-    },
+    }
+
     render() {
         return (
-            <span className="FilterMenu" onClick={this.onShow}>
-                <span className="FilterMenu_icon">V</span>
+            <div className="FilterMenu">
+                <div className="FilterMenu_icon" onClick={this.onToggleMenu}>{this.state.visible ? 'X' : 'V'}</div>
                 {this.renderMenu()}
-            </span>
+            </div>
         );
-    },
+    }
+
     renderMenu() {
         if (!this.state.visible) {
             return null;
@@ -43,12 +47,17 @@ var FilterMenu = React.createClass({
                 {this.renderTextSearch()}
             </div>
         );
-    },
+    }
+
     renderTextSearch() {
         return (
             <input ref="textFilter" type="text" name="supertable-filter-text" placeholder="Search..." onChange={this.onTextSearch} />
         );
     }
-});
+}
+
+FilterMenu.propTypes = {
+    onChange: React.PropTypes.func.isRequired
+};
 
 module.exports = FilterMenu;
