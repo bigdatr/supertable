@@ -1,20 +1,17 @@
-var React = require('react');
-// var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
+const React = require('react');
 
-var Cell = require('./Cell');
-var FilterMenu = require('./FilterMenu');
+const Cell = require('./Cell');
+const FilterMenu = require('./FilterMenu');
 
-var ColumnHeader = React.createClass({
+const ColumnHeader = React.createClass({
     displayName: 'ColumnHeader',
     propTypes: {
         label: React.PropTypes.string,
         width: React.PropTypes.number.isRequired,
-        onFilter: React.PropTypes.func
+        onFilter: React.PropTypes.func,
+        filter: React.PropTypes.object
     },
-    // mixins: [
-    //     PureRenderMixin
-    // ],
-    shouldComponentUpdate: function (nextProps, nextState) {
+    shouldComponentUpdate: function(nextProps) {
         if (this.props.label !== nextProps.label) {
             return true;
         }
@@ -22,7 +19,7 @@ var ColumnHeader = React.createClass({
             return true;
         }
 
-        return false;  
+        return false;
     },
     render() {
         return (
@@ -30,6 +27,10 @@ var ColumnHeader = React.createClass({
         );
     },
     renderLabel() {
+        if (this.props.filter && !this.props.filter.enabled) {
+            return null;
+        }
+
         return (
             <div>
                 {this.props.label}

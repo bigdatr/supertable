@@ -32,7 +32,7 @@ var DataRow = React.createClass({
         }
 
         var cells = this.renderCells();
-        var row = <Row className={className}>{cells}</Row>;
+        var row = <Row className={className} rowHeight={this.props.rowHeight}>{cells}</Row>;
 
         return row;
     },

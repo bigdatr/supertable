@@ -13,6 +13,8 @@ const Table = React.createClass({
         cellRenderer: React.PropTypes.object,
         width: React.PropTypes.number.isRequired,
         height: React.PropTypes.number.isRequired,
+        rowHeight: React.PropTypes.number.isRequired,
+
         fields: React.PropTypes.object.isRequired
     },
     mixins: [
@@ -78,7 +80,7 @@ const Table = React.createClass({
             <div className="supertable-container">
                 <div className="supertable" style={styles.container}>
                     <div className="supertable-wrapper" style={styles.wrapper}>
-                        <Row className="supertable-header">{this.renderColumnHeaders(_fields)}</Row>
+                        <Row className="supertable-header" rowHeight={this.props.rowHeight}>{this.renderColumnHeaders(_fields)}</Row>
 
                         <div className="supertable-content" style={styles.content}>
                             {this.renderDataRows(_fields)}
@@ -94,7 +96,13 @@ const Table = React.createClass({
         return fields.map((f, i) => {
             const width = _this.getCellWidth(fields, i);
 
-            return <ColumnHeader key={f.get('name')} label={f.get('label') || ''} width={width} onFilter={_this.onFilter.bind(_this, f)} />;
+            return (
+                <ColumnHeader key={f.get('name')}
+                                label={f.get('label') || ''}
+                                width={width}
+                                filter={f.get('filter')}
+                                onFilter={_this.onFilter.bind(_this, f)} />
+            );
         });
     },
     renderDataRows(fields) {
@@ -112,7 +120,8 @@ const Table = React.createClass({
                         rowData={d}
                         fields={fields}
                         cellWidth={_this.getCellWidth.bind(_this, fields)}
-                        cellRenderer={cellRenderer} />
+                        cellRenderer={cellRenderer}
+                        rowHeight={this.props.rowHeight} />
             );
         }).toJS();
     }

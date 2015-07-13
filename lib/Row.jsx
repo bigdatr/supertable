@@ -1,16 +1,25 @@
-var React = require('react');
-var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
+const React = require('react');
+const PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 
-var Row = React.createClass({
+const Row = React.createClass({
     displayName: 'Row',
+    propTypes: {
+        rowHeight: React.PropTypes.number.isRequired,
+        className: React.PropTypes.string,
+        children: React.PropTypes.object
+    },
     mixins: [
         PureRenderMixin
     ],
     render() {
-        var className = "supertable-row group " + (this.props.className || '');
+        const className = 'supertable-row group ' + (this.props.className || '');
+
+        const style = {
+            minHeight: this.props.rowHeight
+        };
 
         return (
-            <div className={className}>
+            <div className={className} style={style}>
                 {this.props.children}
             </div>
         );
