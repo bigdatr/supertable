@@ -1,17 +1,14 @@
 const React = require('react');
 
 const Cell = require('./Cell');
-const FilterMenu = require('./FilterMenu');
 
 const ColumnHeader = React.createClass({
     displayName: 'ColumnHeader',
     propTypes: {
         label: React.PropTypes.string,
-        width: React.PropTypes.number.isRequired,
-        onFilter: React.PropTypes.func,
-        filter: React.PropTypes.object
+        width: React.PropTypes.number.isRequired
     },
-    shouldComponentUpdate: function(nextProps) {
+    shouldComponentUpdate(nextProps) {
         if (this.props.label !== nextProps.label) {
             return true;
         }
@@ -27,14 +24,9 @@ const ColumnHeader = React.createClass({
         );
     },
     renderLabel() {
-        if (this.props.filter && !this.props.filter.enabled) {
-            return null;
-        }
-
         return (
             <div>
                 {this.props.label}
-                <FilterMenu onChange={this.props.onFilter} />
             </div>
         );
     }
