@@ -1,4 +1,3 @@
-@import 'FilterMenu';
 @import 'Loader';
 
 .supertable-container {
@@ -35,10 +34,10 @@
             background-color: #e6e6e6;
         }
 
-        .supertable-content {
-            overflow: scroll;
-            -webkit-overflow-scrolling: touch;
-        }
+        // .supertable-content {
+        //     overflow: scroll;
+        //     -webkit-overflow-scrolling: touch;
+        // }
 
         .supertable-datarow {
             border-bottom: #e6e6e6 1px solid;
