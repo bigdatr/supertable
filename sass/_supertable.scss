@@ -1,27 +1,14 @@
 @import 'Loader';
+@import 'Cell';
+@import 'DataRow';
+@import 'Row';
 
 .supertable-container {
-    overflow: scroll-y;
-
     .supertable {
         .group:before,
         .group:after { content:""; display:table; }
         .group:after { clear:both;}
         .group { zoom:1; /* For IE 6/7 */ }
-
-        .supertable-row {
-            clear: both;
-            padding: 0px;
-            margin: 0px;
-        }
-
-        .supertable-cell {
-            display: block;
-            float:left;
-            margin: 5px 0 5px 0;
-
-            padding: 5px;
-        }
 
         .supertable-column:first-child {
             margin-left: 0;
@@ -32,19 +19,6 @@
             font-weight: 500;
             border-bottom: #e6e6e6 1px solid;
             background-color: #e6e6e6;
-        }
-
-        // .supertable-content {
-        //     overflow: scroll;
-        //     -webkit-overflow-scrolling: touch;
-        // }
-
-        .supertable-datarow {
-            border-bottom: #e6e6e6 1px solid;
-        }
-
-        .supertable-datarow--even {
-            background-color: #fafafa;
         }
     }
 }

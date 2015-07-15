@@ -68,9 +68,6 @@ const Table = React.createClass({
             },
             wrapper: {
                 width: this.getContainerWidth(this.props.width)
-            },
-            content: {
-                height: this.props.height
             }
         };
 
@@ -82,7 +79,7 @@ const Table = React.createClass({
                     <div className="supertable-wrapper" style={styles.wrapper}>
                         <Row className="supertable-header" rowHeight={this.props.rowHeight}>{this.renderColumnHeaders(_fields)}</Row>
 
-                        <div className="supertable-content" style={styles.content}>
+                        <div>
                             {this.renderDataRows(_fields)}
                         </div>
                     </div>
