@@ -24,7 +24,7 @@ const TableBody = React.createClass({
     ],
     getDefaultProps() {
         return {
-            pageSize: 20,
+            pageSize: 10,
             bufferPages: 1
         };
     },
@@ -40,10 +40,6 @@ const TableBody = React.createClass({
         const containerHeight = this.props.rowHeight * this.props.pageSize;
 
         const _position = el.scrollTop + height;
-
-        // if (_position >= containerHeight) {
-        //     console.debug('request more!');
-        // }
 
         this._updateVisibleDataIndex(_position);
     },
@@ -70,7 +66,9 @@ const TableBody = React.createClass({
         const _bufferStartIndex = this.state.visibleDataIndex - _bufferSize;
 
         // Number of rows to ignore rendering
-        const rowsToSkip = _bufferStartIndex >= 0 ? (_bufferStartIndex + 1) : 0;
+        console.log('_bufferStartIndex', _bufferStartIndex);
+        console.log('_bufferSize', _bufferSize);
+        const rowsToSkip = _bufferStartIndex >= 0 ? (_bufferStartIndex * _bufferSize) : 0;
 
         // Index of last element to render
         const _bufferEndIndex = (this.state.visibleDataIndex + pageSize) + _bufferSize;
@@ -86,6 +84,9 @@ const TableBody = React.createClass({
         if ((_bufferEndIndex + 1) <= dataSize) {
             numberOfElementsToRender += pageSize;
         }
+
+        console.log('rowsToSkip', rowsToSkip);
+        console.log('numberOfElementsToRender', numberOfElementsToRender);
 
         return this.props.data
                     .skip(rowsToSkip)
@@ -106,7 +107,7 @@ const TableBody = React.createClass({
             <div ref="table" className="supertable-tableBody">
                 <div ref="wrapper" className="supertable-tableBody--wrapper" style={styles.wrapper} onScroll={this.onScroll}>
                     {_data ? this.renderDataRows(_data) : <Loader />}
-                </div>    
+                </div>
             </div>
         );
     },
