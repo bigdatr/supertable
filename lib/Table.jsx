@@ -32,22 +32,7 @@ const Table = React.createClass({
 
         return width;
     },
-    // getContainerWidth(w) {
-    //     const totalFields = this.props.fields.size;
-    //     let totalFlexGrow = 0;
-
-    //     this.props.fields.forEach(f => {
-    //         const fg = 1;//f.get('flexGrow') || 1;
-    //         totalFlexGrow += fg;
-    //     });
-
-    //     const nextWidth = (w / totalFields) * totalFlexGrow;
-
-    //     return nextWidth;
-    // },
     render() {
-        // const {data, fields, cellRenderer, rowHeight, width} = this.props;
-
         return (
             <div className="supertable-container">
                 <div className="supertable">

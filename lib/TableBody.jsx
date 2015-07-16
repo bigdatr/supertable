@@ -4,6 +4,8 @@ const PureRenderMixin = require('react/addons').addons.PureRenderMixin;
 const DataRow = require('./DataRow');
 const Loader = require('./Loader');
 
+const WindowingHelpers = require('./utils/WindowingHelpers');
+
 const TableBody = React.createClass({
     displayName: 'TableBody',
     propTypes: {
@@ -16,103 +18,131 @@ const TableBody = React.createClass({
 
         pageSize: React.PropTypes.number,
         bufferPages: React.PropTypes.number,
-        
-        rowHeight: React.PropTypes.number.isRequired
+
+        rowHeight: React.PropTypes.number.isRequired,
+
+        onLoadMore: React.PropTypes.func
     },
     mixins: [
         PureRenderMixin
     ],
     getDefaultProps() {
         return {
-            pageSize: 10,
-            bufferPages: 1
+            pageSize: 50,
+            bufferPages: 1,
+
+            onLoadMore: () => {}
         };
     },
     getInitialState() {
+        this._position = 0;
+        this._isScrolling = false;
+
         return {
-            visibleDataIndex: 0
+            visibleDataIndex: 0,
+            rowsToSkip: 0,
+            numberOfElementsToRender: this.props.pageSize * 2
         };
     },
-    onScroll(e) {
+    componentDidMount() {
+        this._rafUpdate();
+    },
+    onScroll() {
         const el = this.refs.wrapper.getDOMNode();
         const rect = el.getBoundingClientRect();
         const height = Math.ceil(rect.height);
-        const containerHeight = this.props.rowHeight * this.props.pageSize;
 
         const _position = el.scrollTop + height;
 
-        this._updateVisibleDataIndex(_position);
-    },
-    _updateVisibleDataIndex(position) {
-        const lastVisibleRow = Math.ceil(position / this.props.rowHeight);
+        this._position = _position;
 
-        const nextVisibleDataIndex = this.state.visibleDataIndex + this.props.pageSize;
-
-        if (lastVisibleRow >= nextVisibleDataIndex) {
-            // Display the next page
-            this.setState({visibleDataIndex: nextVisibleDataIndex});
+        if (!this._isScrolling) {
+            this._rafUpdate();
         }
+
+        this._isScrolling = true;
+    },
+    _rafUpdate() {
+        requestAnimationFrame(this._update);
+    },
+    _update() {
+        if (this._lastUpdatePosition !== this._position) {
+            this._rafUpdate();
+        }
+        else {
+            this._isScrolling = false;
+        }
+
+        const position = this._position;
+        this._lastUpdatePosition = position;
+
+        const firstVisibleRow = (Math.floor(position / this.props.rowHeight)) - (this.props.pageSize);
+        const lastVisibleRow = Math.ceil(position / this.props.rowHeight);
+        const nextIndex = this.state.visibleDataIndex + this.props.pageSize;
+        const prevIndex = this.state.visibleDataIndex - this.props.pageSize;
+        let nextVisibleDataIndex;
+
+        if (lastVisibleRow >= nextIndex) {
+            // Scrolling down
+            nextVisibleDataIndex = nextIndex;
+            this.props.onLoadMore();
+        }
+        else if (firstVisibleRow <= prevIndex) {
+            // Scrolling up
+            nextVisibleDataIndex = prevIndex;
+        }
+
+        if (nextVisibleDataIndex) {
+            const nextState = this._getDataState(nextVisibleDataIndex);
+            nextState.visibleDataIndex = nextVisibleDataIndex < 0 ? 0 : nextVisibleDataIndex;
+
+            this.setState(nextState);
+        }
+    },
+    _getDataState(visibleDataIndex) {
+        const {pageSize, bufferPages} = this.props;
+
+        const bufferSize = WindowingHelpers.getBufferSize(pageSize, bufferPages);
+        const rowsToSkip = WindowingHelpers.getRowsToSkip(visibleDataIndex, bufferSize);
+        const numberOfElementsToRender = WindowingHelpers.getNumberOfElementsToRender(rowsToSkip, bufferSize);
+
+        // console.log('visibleDataIndex', this.state.visibleDataIndex, 'rowsToSkip', rowsToSkip, 'numberOfElementsToRender', numberOfElementsToRender);
+
+        return {
+            rowsToSkip: rowsToSkip,
+            numberOfElementsToRender: numberOfElementsToRender
+        };
     },
     _getData() {
         if (!this.props.data) { return null; }
 
-        const {pageSize, bufferPages} = this.props;
-        const dataSize = this.props.data.size;
-
-        // Number of rows to buffer
-        const _bufferSize = (bufferPages + 1) * pageSize;
-
-        // Index of first element which will be rendered
-        const _bufferStartIndex = this.state.visibleDataIndex - _bufferSize;
-
-        // Number of rows to ignore rendering
-        console.log('_bufferStartIndex', _bufferStartIndex);
-        console.log('_bufferSize', _bufferSize);
-        const rowsToSkip = _bufferStartIndex >= 0 ? (_bufferStartIndex * _bufferSize) : 0;
-
-        // Index of last element to render
-        const _bufferEndIndex = (this.state.visibleDataIndex + pageSize) + _bufferSize;
-
-        let numberOfElementsToRender = pageSize;
-
-        // Check if elements exist to buffer before visible page
-        if (_bufferStartIndex >= 0) {
-            numberOfElementsToRender += pageSize;
-        }
-
-        // Check if elements exist to buffer after visible page
-        if ((_bufferEndIndex + 1) <= dataSize) {
-            numberOfElementsToRender += pageSize;
-        }
-
-        console.log('rowsToSkip', rowsToSkip);
-        console.log('numberOfElementsToRender', numberOfElementsToRender);
-
         return this.props.data
-                    .skip(rowsToSkip)
-                    .take(numberOfElementsToRender);
+                    .skip(this.state.rowsToSkip)
+                    .take(this.state.numberOfElementsToRender);
     },
     render() {
-        console.log('this.state.visibleDataIndex', this.state.visibleDataIndex);
-        var _data = this._getData();
+        const _data = this._getData();
 
         const styles = {
             wrapper: {
                 height: this.props.height,
                 width: this.props.width
+            },
+            topBuffer: {
+                height: this.state.rowsToSkip * this.props.rowHeight
             }
         };
 
         return (
             <div ref="table" className="supertable-tableBody">
                 <div ref="wrapper" className="supertable-tableBody--wrapper" style={styles.wrapper} onScroll={this.onScroll}>
+                    <div style={styles.topBuffer}></div>
                     {_data ? this.renderDataRows(_data) : <Loader />}
                 </div>
             </div>
         );
     },
     renderDataRows(data) {
-        const _this = this;
         const {fields, cellRenderer, rowHeight} = this.props;
 
         return data.map((d, i) => {

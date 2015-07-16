@@ -219,6 +219,7 @@
         "componentWillUnmount",
         "/^on.+$/",
         "/^get.+$/",
+        "/^_.+$/",
         "render",
         "/^render.+$/"
       ]
