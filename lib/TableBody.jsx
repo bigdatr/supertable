@@ -21,7 +21,8 @@ const TableBody = React.createClass({
 
         rowHeight: React.PropTypes.number.isRequired,
 
-        onLoadMore: React.PropTypes.func
+        onLoadMore: React.PropTypes.func,
+        loading: React.PropTypes.bool
     },
     mixins: [
         PureRenderMixin
@@ -31,7 +32,8 @@ const TableBody = React.createClass({
             pageSize: 50,
             bufferPages: 1,
 
-            onLoadMore: () => {}
+            onLoadMore: () => {},
+            loading: false
         };
     },
     getInitialState() {
@@ -46,6 +48,16 @@ const TableBody = React.createClass({
     },
     componentDidMount() {
         this._rafUpdate();
+    },
+    componentDidUpdate() {
+        if (this.props.bufferPages > 0 && this.props.data && this.props.data.size === this.props.pageSize) {
+            this.onLoadMore();
+        }
+    },
+    onLoadMore() {
+        if (!this.props.loading) {
+            this.props.onLoadMore();
+        }
     },
     onScroll() {
         const el = this.refs.wrapper.getDOMNode();
@@ -85,7 +97,7 @@ const TableBody = React.createClass({
         if (lastVisibleRow >= nextIndex) {
             // Scrolling down
             nextVisibleDataIndex = nextIndex;
-            this.props.onLoadMore();
+            this.onLoadMore();
         }
         else if (firstVisibleRow <= prevIndex) {
             // Scrolling up
