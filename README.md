@@ -10,30 +10,29 @@ This project relies on both ReactJS & ImmutableJS (thank you @facebook)
 
 ## Useage
 ```js
-var React = require('react');
-var Immutable = require('immutable');
+const React = require('react');
+const Immutable = require('immutable');
+const SuperTable = require('supertable');
 
-var {Table} = require('supertable');
-
-var fields = [
+const fields = [
     {name: 'fieldA', label: 'Field A'},
     {name: 'fieldB', label: 'Field B'},
     {name: 'fieldC', label: 'Field C'}
 ];
 
-var someFakeData = Immutable.fromJS([
+const someFakeData = Immutable.fromJS([
     {_id: 1, fieldA: 'valueA1', fieldB: 'valueB1', fieldC: 'valueC1'},
     {_id: 2, fieldA: 'valueA2', fieldB: 'valueB2', fieldC: 'valueC2'},
     {_id: 3, fieldA: 'valueA3', fieldB: 'valueB3', fieldC: 'valueC3'}
 ]);
 
-var MyDataTable = React.createClass({
+const MyDataTable = React.createClass({
     render() {
         return (
-            <Table  data={someFakeData}
-                    width={1000}
-                    height={500}
-                    fields={fields} />
+            <SuperTable  data={someFakeData}
+                         fields={fields}
+                         width={1000}
+                         height={500} />
         );
     }
 });

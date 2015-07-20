@@ -22,6 +22,8 @@ module.exports = function(config) {
         logLevel: config.LOG_INFO,
         singleRun: true,
         autoWatch: false,
+        // singleRun: false,
+        // autoWatch: true,
         webpack: {
             devtool: 'inline-source-map',
             module: {

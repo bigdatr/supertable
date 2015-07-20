@@ -1,8 +1,9 @@
-var React = require('react');
+const React = require('react');
 
-var Cell = React.createClass({
+const Cell = React.createClass({
     displayName: 'Cell',
     propTypes: {
+        className: React.PropTypes.string,
         width: React.PropTypes.number.isRequired,
         label: React.PropTypes.oneOfType([
             React.PropTypes.element,
@@ -10,12 +11,12 @@ var Cell = React.createClass({
             React.PropTypes.number
         ])
     },
-    shouldComponentUpdate: function (nextProps, nextState) {
+    shouldComponentUpdate: function(nextProps) {
         if (nextProps.width !== this.props.width) {
             return true;
         }
 
-        var type = typeof nextProps.label;
+        const type = typeof nextProps.label;
 
         // Only compare strings or numbers, ignore objects
         if (type === 'string' || type === 'number') {
@@ -26,21 +27,24 @@ var Cell = React.createClass({
 
         return false;
     },
-    render: function() {
-        var styles = {
-            col: {
-                width: this.props.width
-            }
-        };
-
-        var className = 'supertable-cell';
+    getClassName() {
+        let className = 'supertable-cell';
 
         if (this.props.className) {
             className += ' ' + this.props.className;
         }
 
+        return className;
+    },
+    render() {
+        const styles = {
+            col: {
+                width: this.props.width
+            }
+        };
+
         return (
-            <div className={className} style={styles.col}>
+            <div className={this.getClassName()} style={styles.col}>
                 {this.props.label}
             </div>
         );
