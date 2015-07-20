@@ -73,7 +73,7 @@ Width of the table in pixels.
 #### height _(required)_
 Height of the table in pixels
 
-#### rowHeight
+#### rowHeight _(required)_
 Exact height of a row in pixels
 
 #### cellRenderer
@@ -113,7 +113,7 @@ const cellRenderer = {
 A function. This function will be executed when the table has been scrolled and more data is required for display to the user. Use this to trigger any AJAX requests and the extra data should be added to your existing `ImmutableList` and sent as a prop to the `SuperTable` component.
 
 #### loading
-A boolean (true|false). `true` when there is a `async` request in progress.
+A `Boolean` which defaults to `false`. `true` when there is a `async` request in progress.
 
 
 
