@@ -1,11 +1,12 @@
+var webpack = require('webpack');
 var _browsers;
 
 if (process.env.CONTINUOUS_INTEGRATION) {
     // For Travis CI
-    _browsers = ['Firefox', 'PhantomJS'];
+    _browsers = ['Firefox'];
 }
 else {
-    _browsers = ['Chrome', 'PhantomJS', 'Firefox'];
+    _browsers = ['Chrome', 'Firefox'];
 }
 
 module.exports = function(config) {
@@ -16,7 +17,7 @@ module.exports = function(config) {
         preprocessors: {
             'tests.webpack.js': ['webpack', 'sourcemap']
         },
-        reporters: ['dots'],
+        reporters: ['progress', 'dots', 'coverage'],
         colors: true,
         logLevel: config.LOG_INFO,
         singleRun: true,
@@ -25,12 +26,17 @@ module.exports = function(config) {
             devtool: 'inline-source-map',
             module: {
                 loaders: [
+                    { test: /\.jsx$/, loader: 'babel-loader' },
                     { test: /\.js$/, loader: 'babel-loader' }
                 ]
             }
         },
         webpackServer: {
             noInfo: true
+        },
+        coverageReporter: {
+            type: 'lcov',
+            dir: 'coverage/'
         }
     });
 };

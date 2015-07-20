@@ -29,7 +29,11 @@
   "globals": {
         "document": true,
         "window": true,
-        "_": true
+        "_": true,
+
+        "describe": true,
+        "it": true,
+        "expect": true
     },
   "rules": {
 
