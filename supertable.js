@@ -1,6 +1,3 @@
-const _err = new Error('supertable:: Should require the component you require directly eg. `const Table = require("supertable/lib/Table");`');
-console.warn(_err.stack);
+const Table = require('./lib/Table.jsx');
 
-const supertable = {};
-
-module.exports = supertable;
+module.exports = Table;
