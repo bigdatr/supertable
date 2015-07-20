@@ -21,9 +21,9 @@ const fields = [
 ];
 
 const someFakeData = Immutable.fromJS([
-    {_id: 1, fieldA: 'valueA1', fieldB: 'valueB1', fieldC: 'valueC1'},
-    {_id: 2, fieldA: 'valueA2', fieldB: 'valueB2', fieldC: 'valueC2'},
-    {_id: 3, fieldA: 'valueA3', fieldB: 'valueB3', fieldC: 'valueC3'}
+    {_id: 1, fieldA: 'valueA1', fieldB: 99, fieldC: 'valueC1'},
+    {_id: 2, fieldA: 'valueA2', fieldB: 88, fieldC: 'valueC2'},
+    {_id: 3, fieldA: 'valueA3', fieldB: 77, fieldC: 'valueC3'}
 ]);
 
 const MyDataTable = React.createClass({
@@ -46,9 +46,9 @@ An `Immutable.List` of `Immutable.Map`. This should contain all of the data requ
 ###### Example
 ```js
 const someFakeData = Immutable.fromJS([
-    {_id: 1, fieldA: 'valueA1', fieldB: 'valueB1', fieldC: 'valueC1'},
-    {_id: 2, fieldA: 'valueA2', fieldB: 'valueB2', fieldC: 'valueC2'},
-    {_id: 3, fieldA: 'valueA3', fieldB: 'valueB3', fieldC: 'valueC3'}
+    {_id: 1, fieldA: 'valueA1', fieldB: 99, fieldC: 'valueC1'},
+    {_id: 2, fieldA: 'valueA2', fieldB: 88, fieldC: 'valueC2'},
+    {_id: 3, fieldA: 'valueA3', fieldB: 77, fieldC: 'valueC3'}
 ]);
 ```
 
@@ -72,4 +72,49 @@ Width of the table in pixels.
 
 #### height _(required)_
 Height of the table in pixels
+
+#### rowHeight
+Exact height of a row in pixels
+
+#### cellRenderer
+An `Object`. This prop allows for custom rendering of any cell. Any properties on this object should be named exactly the same as their corresponding field name. The value must be a function which returns something which is renderable by React (String|React.Element).
+
+Each function will be passed `rowData` which is and `Immutable.Map` containing data for the entire row.
+
+**NOTE: Only need to provide handlers when custom formatting is needed, otherwise it will default to just display as text**
+
+```js
+const cellRenderer = {
+    /*
+     * Render fieldB as currency
+     */
+    fieldB: (rowData) => {
+        const value = rowData.get('fieldB');
+        return <span className="myCSSCurrencyClass">{'$' + value.toFixed(2)}</span>;
+    },
+
+    /*
+     * Add conditional formatting to fieldC
+     */
+    fieldC: (rowData) => {
+        const value = rowData.get('fieldC');
+        const fieldBValue = rowData.get('fieldB');
+
+        const cellStyle = {
+            color: fieldBValue > 90 ? 'green' : 'red'
+        };
+
+        return <span style={cellStyle}>{value}</span>;
+    }
+};
+```
+
+#### onLoadMore
+A function. This function will be executed when the table has been scrolled and more data is required for display to the user. Use this to trigger any AJAX requests and the extra data should be added to your existing `ImmutableList` and sent as a prop to the `SuperTable` component.
+
+#### loading
+A boolean (true|false). `true` when there is a `async` request in progress.
+
+
+
 
