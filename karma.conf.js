@@ -1,8 +1,8 @@
 var _browsers;
 
 if (process.env.CONTINUOUS_INTEGRATION) {
-    // Travis CI only supports Firefox, eventually should use saucelabs
-    _browsers = ['Firefox'];
+    // For Travis CI
+    _browsers = ['Firefox', 'PhantomJS'];
 }
 else {
     _browsers = ['Chrome', 'PhantomJS', 'Firefox'];
