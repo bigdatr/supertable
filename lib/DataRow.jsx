@@ -11,7 +11,7 @@ const DataRow = React.createClass({
         fields: React.PropTypes.object.isRequired,
         cellWidth: React.PropTypes.oneOfType([
             React.PropTypes.number,
-            React.PropTypes.func
+            React.PropTypes.arrayOf(React.PropTypes.number)
         ]).isRequired,
         cellRenderer: React.PropTypes.object,
         rowHeight: React.PropTypes.number
@@ -33,13 +33,13 @@ const DataRow = React.createClass({
         }
 
         const cells = this.renderCells();
-        const row = <Row className={className} rowHeight={this.props.rowHeight}>{cells}</Row>;
+        const row = <Row className={className} height={this.props.rowHeight}>{cells}</Row>;
 
         return row;
     },
     renderCells() {
-        const _this = this;
         const {rowData, cellRenderer} = this.props;
+        const _widths = this.props.cellWidth;
 
         return this.props.fields
                         .map((f, i) => {
@@ -53,7 +53,7 @@ const DataRow = React.createClass({
                             if (typeof raw === 'object' && raw.length) { raw = raw.join(', '); }
 
                             const val = cellRenderer.has(fieldName) ? cellRenderer.get(fieldName)(rowData) : raw;
-                            const cellWidth = typeof _this.props.cellWidth === 'function' ? _this.props.cellWidth(i) : _this.props.cellWidth;
+                            const cellWidth = _widths[i];
 
                             const cell = (
                                 <div key={i} className="supertable-cell" style={{width: cellWidth}}>

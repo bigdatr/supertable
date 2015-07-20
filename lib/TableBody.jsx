@@ -12,6 +12,10 @@ const TableBody = React.createClass({
         data: React.PropTypes.object,
         fields: React.PropTypes.object.isRequired,
         cellRenderer: React.PropTypes.object,
+        cellWidth: React.PropTypes.oneOfType([
+            React.PropTypes.number,
+            React.PropTypes.func
+        ]).isRequired,
 
         width: React.PropTypes.number,
         height: React.PropTypes.number,
@@ -31,6 +35,7 @@ const TableBody = React.createClass({
         return {
             pageSize: 50,
             bufferPages: 1,
+            cellWidth: 1,
 
             onLoadMore: () => {},
             loading: false
@@ -155,7 +160,18 @@ const TableBody = React.createClass({
         );
     },
     renderDataRows(data) {
-        const {fields, cellRenderer, rowHeight} = this.props;
+        const {fields, cellRenderer, rowHeight, cellWidth} = this.props;
+
+        let _widths;
+
+        if (typeof cellWidth === 'function') {
+            _widths = fields.map((f, i) => {
+                return cellWidth(fields, i);
+            }).toJS();
+        }
+        else {
+            _widths = fields.map(() => { return cellWidth; });
+        }
 
         return data.map((d, i) => {
             return (
@@ -163,7 +179,7 @@ const TableBody = React.createClass({
                         rowIndex={i}
                         rowData={d}
                         fields={fields}
-                        cellWidth={150}
+                        cellWidth={_widths}
                         cellRenderer={cellRenderer}
                         rowHeight={rowHeight} />
             );

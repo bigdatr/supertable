@@ -6,7 +6,8 @@ const Row = React.createClass({
     propTypes: {
         className: React.PropTypes.string,
         children: React.PropTypes.object,
-        rowHeight: React.PropTypes.number
+        height: React.PropTypes.number,
+        width: React.PropTypes.number
     },
     mixins: [
         PureRenderMixin
@@ -14,13 +15,19 @@ const Row = React.createClass({
     render() {
         const className = 'supertable-row group ' + (this.props.className || '');
 
-        let styles = {};
+        let styles = {
+            row: {}
+        };
 
-        if (this.props.rowHeight) {
+        if (this.props.height) {
             styles.row = {
-                height: this.props.rowHeight,
+                height: this.props.height,
                 overflow: 'hidden'
             };
+        }
+
+        if (this.props.width) {
+            styles.row.width = this.props.width;
         }
 
         return (
