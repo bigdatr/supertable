@@ -40,8 +40,11 @@ const MyDataTable = React.createClass({
 
 ### Config
 
-#### data _(required)_
-An `Immutable.List` of `Immutable.Map`. This should contain all of the data required for display. When data is fetched `async`, it should be added to this same list. Re-using the same list with existing objects will allow for `===` equality test to work which means you get a little performance benefit.
+**data** _(required)_
+
+`Immutable.List` of `Immutable.Map`
+
+This should contain all of the data required for display. When data is fetched `async`, it should be added to this same list. Re-using the same list with existing objects will allow for `===` equality test to work which means you get a little performance benefit.
 
 ###### Example
 ```js
@@ -52,8 +55,11 @@ const someFakeData = Immutable.fromJS([
 ]);
 ```
 
-#### fields _(required)_
-An `Array` of `Object`. Each object in this array represents a column which should be visible in the table.
+**fields** _(required)_
+
+`Array` of `Object`
+
+Each object in this array represents a column which should be visible in the table.
 
 * **name** <String>: Property name to reference in your data
 * **label** <String|React.Element>: Contents of the column header
@@ -67,16 +73,28 @@ const fields = [
 ];
 ```
 
-#### width _(required)_
+**width** _(required)_
+
+`Number`
+
 Width of the table in pixels.
 
-#### height _(required)_
+**height** _(required)_
+
+`Number`
+
 Height of the table in pixels
 
-#### rowHeight _(required)_
+**rowHeight** _(required)_
+
+`Number`
+
 Exact height of a row in pixels
 
-#### cellRenderer
+**cellRenderer**
+
+`Object`
+
 An `Object`. This prop allows for custom rendering of any cell. Any properties on this object should be named exactly the same as their corresponding field name. The value must be a function which returns something which is renderable by React (String|React.Element).
 
 Each function will be passed `rowData` which is and `Immutable.Map` containing data for the entire row.
@@ -109,11 +127,17 @@ const cellRenderer = {
 };
 ```
 
-#### onLoadMore
+**onLoadMore**
+
+`Function`
+
 A function. This function will be executed when the table has been scrolled and more data is required for display to the user. Use this to trigger any AJAX requests and the extra data should be added to your existing `ImmutableList` and sent as a prop to the `SuperTable` component.
 
-#### loading
-A `Boolean` which defaults to `false`. `true` when there is a `async` request in progress.
+**loading**
+
+`Boolean` _(default: false)_
+
+`true` when there is a `async` request in progress.
 
 
 
