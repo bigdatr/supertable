@@ -40,7 +40,7 @@ const MyDataTable = React.createClass({
 
 ### Config
 
-#### data <Immutable.List> _(required)_
+#### data _(required)_
 An `Immutable.List` of `Immutable.Map`. This should contain all of the data required for display. When data is fetched `async`, it should be added to this same list. Re-using the same list with existing objects will allow for `===` equality test to work which means you get a little performance benefit.
 
 ###### Example
@@ -52,7 +52,7 @@ const someFakeData = Immutable.fromJS([
 ]);
 ```
 
-#### fields <Array> _(required)_
+#### fields _(required)_
 An `Array` of `Object`. Each object in this array represents a column which should be visible in the table.
 
 * **name** <String>: Property name to reference in your data
@@ -67,9 +67,9 @@ const fields = [
 ];
 ```
 
-#### width <Number> _(required)_
+#### width _(required)_
 Width of the table in pixels.
 
-#### height <Number> _(required)_
+#### height _(required)_
 Height of the table in pixels
 
