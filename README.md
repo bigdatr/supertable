@@ -1,4 +1,5 @@
-# supertable
+supertable  [![Build Status](https://travis-ci.org/bigdatr/supertable.svg)](https://travis-ci.org/bigdatr/supertable)
+======
 
 A ReactJS table component which is fully featured, configurable & highly performant (or at least that is the intention).
 
