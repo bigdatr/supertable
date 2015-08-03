@@ -1,12 +1,13 @@
-const React = require('react');
+import React from 'react';
 
-class Loader extends React.Component {
-	render() {
-		return (
-			<div className="supertable-loader">
+const Loader = React.createClass({
+    displayName: 'Loader',
+    render() {
+        return (
+            <div className="supertable-loader">
             </div>
-		);
-	}
-}
+        );
+    }
+});
 
 module.exports = Loader;

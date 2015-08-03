@@ -1,5 +1,4 @@
-const React = require('react');
-const PureRenderMixin = require('react/addons').addons.PureRenderMixin;
+import React from 'react/addons';
 
 const Row = React.createClass({
     displayName: 'Row',
@@ -10,7 +9,7 @@ const Row = React.createClass({
         width: React.PropTypes.number
     },
     mixins: [
-        PureRenderMixin
+        React.addons.PureRenderMixin
     ],
     render() {
         const className = 'supertable-row group ' + (this.props.className || '');

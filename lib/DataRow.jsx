@@ -1,7 +1,5 @@
-const React = require('react');
-const PureRenderMixin = require('react/addons').addons.PureRenderMixin;
-
-const Row = require('./Row');
+import React from 'react/addons';
+import Row from './Row';
 
 const DataRow = React.createClass({
     displayName: 'DataRow',
@@ -9,15 +7,12 @@ const DataRow = React.createClass({
         rowIndex: React.PropTypes.number,
         rowData: React.PropTypes.object.isRequired,
         fields: React.PropTypes.object.isRequired,
-        cellWidth: React.PropTypes.oneOfType([
-            React.PropTypes.number,
-            React.PropTypes.arrayOf(React.PropTypes.number)
-        ]).isRequired,
+        cellWidth: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
         cellRenderer: React.PropTypes.object,
         rowHeight: React.PropTypes.number
     },
     mixins: [
-        PureRenderMixin
+        React.addons.PureRenderMixin
     ],
     getDefaultProps() {
         return {

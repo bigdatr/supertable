@@ -1,12 +1,9 @@
-/* @flow */
+import React from 'react';
 
-const React = require('react');
-const PureRenderMixin = require('react/addons').addons.PureRenderMixin;
+import DataRow from './DataRow';
+import Loader from './Loader';
 
-const DataRow = require('./DataRow');
-const Loader = require('./Loader');
-
-const WindowingHelpers = require('./utils/WindowingHelpers');
+import WindowingHelpers from './utils/WindowingHelpers';
 
 const TableBody = React.createClass({
     displayName: 'TableBody',
@@ -31,7 +28,7 @@ const TableBody = React.createClass({
         loading: React.PropTypes.bool
     },
     mixins: [
-        PureRenderMixin
+        React.addons.PureRenderMixin
     ],
     getDefaultProps() {
         return {

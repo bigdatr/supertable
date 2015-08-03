@@ -1,9 +1,9 @@
-const React = require('react');
-const Immutable = require('immutable');
+import React from 'react/addons';
+import Immutable from 'immutable';
 
-const Row = require('./Row');
-const ColumnHeader = require('./ColumnHeader');
-const TableBody = require('./TableBody');
+import Row from './Row';
+import ColumnHeader from './ColumnHeader';
+import TableBody from './TableBody';
 
 const Table = React.createClass({
     displayName: 'Table',

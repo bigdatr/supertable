@@ -1,6 +1,5 @@
-const React = require('react');
-
-const Cell = require('./Cell');
+import React from 'react';
+import Cell from './Cell';
 
 const ColumnHeader = React.createClass({
     displayName: 'ColumnHeader',
