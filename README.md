@@ -10,9 +10,9 @@ This project relies on both ReactJS & ImmutableJS (thank you @facebook)
 
 ## Useage
 ```js
-const React = require('react');
-const Immutable = require('immutable');
-const SuperTable = require('supertable');
+import React from 'react';
+import Immutable from 'immutable';
+import SuperTable from 'supertable';
 
 const fields = [
     {name: 'fieldA', label: 'Field A'},
@@ -59,6 +59,8 @@ Each object in this array represents a column which should be visible in the tab
 
 * **name** <String>: Property name to reference in your data
 * **label** <String|React.Element>: Contents of the column header
+* **width** <Number>: The fixed width for this column in pixels
+* **flexGrow** <Number>: The grow factor relative to other columns. Same as the flex-grow API from http://www.w3.org/TR/css3-flexbox/. Basically, take any available extra width and distribute it proportionally according to all columns' flexGrow values. Defaults to zero (no-flexing).
 
 ###### Example
 ```js
