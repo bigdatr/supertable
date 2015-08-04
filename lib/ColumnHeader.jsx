@@ -7,6 +7,11 @@ const ColumnHeader = React.createClass({
         label: React.PropTypes.string,
         width: React.PropTypes.number.isRequired
     },
+    getDefaultProps() {
+        return {
+            label: ''
+        };
+    },
     shouldComponentUpdate(nextProps) {
         if (this.props.label !== nextProps.label) {
             return true;

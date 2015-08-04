@@ -30,41 +30,46 @@ const Table = React.createClass({
             filters: Immutable.List()
         };
     },
-    getCellWidth(fields, fieldIndex) {
-        const f = fields.get(fieldIndex);
-        const flexGrow = f.get('flexGrow') || 1;
-        const cellWidth = this.props.width / fields.size;
-        const width = cellWidth * flexGrow;
+    getWidths() {
+        let totalFlexGrow = 0;
+        let totalFixedWidthColumnPx = 0;
 
-        return width;
-    },
-    getTotalWidth() {
-        const _this = this;
-        const {fields} = this.props;
-        let totalWidth = 0;
-
-        fields.forEach((f, i) => {
-            const width = _this.getCellWidth(fields, i);
-            totalWidth += width;
+        this.props.fields.forEach(f => {
+            if (f.has('width')) {
+                // Fixed width columns (ignores flexGrow prop)
+                totalFixedWidthColumnPx += f.get('width');
+            }
+            else {
+                const flexGrow = f.get('flexGrow') || 1;
+                totalFlexGrow += flexGrow;
+            }
         });
 
-        return totalWidth;
+        // Calculate width of each flex unit after allocating space for fixed width columns
+        const unitWidth = (this.props.width - totalFixedWidthColumnPx) / totalFlexGrow;
+
+        const _widths = this.props.fields.map(f => {
+            if (f.has('width')) {
+                return f.get('width');
+            }
+
+            const flexGrow = f.get('flexGrow') || 1;
+
+            return Math.floor(flexGrow * unitWidth);
+        }).toJS();
+
+        return _widths;
     },
     render() {
-        const totalWidth = this.getTotalWidth();
-        const styles = {
-            wrapper: {
-                width: totalWidth
-            }
-        };
+        const _widths = this.getWidths();
 
         return (
             <div className="supertable-container">
                 <div className="supertable">
-                    <div className="supertable-wrapper" style={styles.wrapper}>
-                        {this.renderColumnHeaders(totalWidth)}
+                    <div className="supertable-wrapper">
+                        {this.renderColumnHeaders(_widths)}
 
-                        <TableBody {...this.props} cellWidth={this.getCellWidth} width={totalWidth} />
+                        <TableBody {...this.props} cellWidth={_widths} width={this.props.width} />
 
                         {this.renderLoader()}
                     </div>
@@ -72,15 +77,13 @@ const Table = React.createClass({
             </div>
         );
     },
-    renderColumnHeaders(totalWidth) {
-        const _this = this;
-        const {fields} = this.props;
-        const headers = fields.map((f, i) => {
-            return <ColumnHeader key={f.get('name')} label={f.get('label') || ''} width={_this.getCellWidth(fields, i)} />;
+    renderColumnHeaders(widths) {
+        const headers = this.props.fields.map((f, i) => {
+            return <ColumnHeader key={f.get('name')} label={f.get('label')} width={widths[i]} />;
         });
 
         return (
-            <Row className="supertable-header" width={totalWidth}>
+            <Row className="supertable-header" width={this.props.width}>
                 {headers}
             </Row>
         );
