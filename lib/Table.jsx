@@ -65,13 +65,12 @@ const Table = React.createClass({
 
         return (
             <div className="supertable-container">
+                {this.renderLoader()}
                 <div className="supertable">
                     <div className="supertable-wrapper">
                         {this.renderColumnHeaders(_widths)}
 
                         <TableBody {...this.props} cellWidth={_widths} width={this.props.width} />
-
-                        {this.renderLoader()}
                     </div>
                 </div>
             </div>
@@ -91,16 +90,32 @@ const Table = React.createClass({
     renderLoader() {
         if (!this.props.loading) { return null; }
 
-        const style = {
-            backgroundColor: '#93619f',
-            color: '#fff',
-            textAlign: 'center',
-            fontSize: 40,
-            fontWeight: 600,
-            padding: 50
+        const styles = {
+            wrapper: {
+                width: this.props.width - (16 * 2),
+                marginTop: 40,
+                position: 'absolute',
+                textAlign: 'center'
+            },
+            loader: {
+                // backgroundColor: '#93619f',
+                // color: '#fff',
+                color: '#93619f',
+                backgroundColor: '#fff',
+                textAlign: 'center',
+                fontSize: 14,
+                fontWeight: 600,
+                padding: '10px 30px',
+                opacity: 0.7,
+                width: 200
+            }
         };
 
-        return <div style={style}>Loading...</div>;
+        return (
+            <div style={styles.wrapper}>
+                <div style={styles.loader}>Loading...</div>
+            </div>
+        );
     }
 });
 

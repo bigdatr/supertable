@@ -11,13 +11,20 @@ const DataRow = React.createClass({
         cellRenderer: React.PropTypes.object,
         rowHeight: React.PropTypes.number
     },
-    mixins: [
-        React.addons.PureRenderMixin
-    ],
     getDefaultProps() {
         return {
             cellRenderer: {}
         };
+    },
+    shouldComponentUpdate(nextProps) {
+        if (nextProps.rowData !== this.props.rowData) {
+            return true;
+        }
+        else if (nextProps.fields !== this.props.fields) {
+            return true;
+        }
+
+        return false;
     },
     render() {
         let className = 'supertable-datarow';
