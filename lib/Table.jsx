@@ -10,6 +10,7 @@ const Table = React.createClass({
     propTypes: {
         data: React.PropTypes.object,
         cellRenderer: React.PropTypes.object,
+        headerRenderer: React.PropTypes.object,
         width: React.PropTypes.number.isRequired,
         height: React.PropTypes.number.isRequired,
         rowHeight: React.PropTypes.number.isRequired,
@@ -22,7 +23,8 @@ const Table = React.createClass({
     ],
     getDefaultProps() {
         return {
-            loading: false
+            loading: false,
+            headerRenderer: Immutable.Map()
         };
     },
     getInitialState() {
@@ -77,8 +79,17 @@ const Table = React.createClass({
         );
     },
     renderColumnHeaders(widths) {
+        const {headerRenderer} = this.props;
+
         const headers = this.props.fields.map((f, i) => {
-            return <ColumnHeader key={f.get('name')} label={f.get('label')} width={widths[i]} />;
+            const field = f.get('name');
+            let label = f.get('label') || '';
+
+            if (headerRenderer.has(field)) {
+                label = headerRenderer.get(field)(f);
+            }
+
+            return <ColumnHeader key={field} label={label} width={widths[i]} />;
         });
 
         return (

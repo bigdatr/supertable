@@ -4,7 +4,7 @@ import Cell from './Cell';
 const ColumnHeader = React.createClass({
     displayName: 'ColumnHeader',
     propTypes: {
-        label: React.PropTypes.string,
+        label: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
         width: React.PropTypes.number.isRequired
     },
     getDefaultProps() {
