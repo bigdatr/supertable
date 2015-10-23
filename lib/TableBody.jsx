@@ -39,9 +39,15 @@ const TableBody = React.createClass({
     getInitialState() {
         this._position = 0;
         this._isScrolling = false;
-
+        console.log('setState', {
+            visibleDataIndex: 0,
+            scrollTop: 0,
+            rowsToSkip: 0,
+            numberOfElementsToRender: this.props.pageSize * 2
+        });
         return {
             visibleDataIndex: 0,
+            scrollTop: 0,
             rowsToSkip: 0,
             numberOfElementsToRender: this.props.pageSize * 2
         };
@@ -63,8 +69,8 @@ const TableBody = React.createClass({
         const el = this.refs.wrapper.getDOMNode();
         const rect = el.getBoundingClientRect();
         const height = Math.ceil(rect.height);
-
-        const _position = el.scrollTop + height;
+        const scrollTop = el.scrollTop;
+        const _position = scrollTop + height;
 
         this._position = _position;
 
@@ -72,6 +78,7 @@ const TableBody = React.createClass({
             this._rafUpdate();
         }
 
+        this._scrollTop = scrollTop;
         this._isScrolling = true;
     },
     _rafUpdate() {
@@ -110,6 +117,10 @@ const TableBody = React.createClass({
 
             this.setState(nextState);
         }
+
+        this.setState({
+            scrollTop: this._scrollTop || 0
+        });
     },
     _getDataState(visibleDataIndex) {
         const {pageSize, bufferPages} = this.props;
@@ -146,7 +157,7 @@ const TableBody = React.createClass({
         };
 
         return (
-            <div ref="table" className="supertable-tableBody">
+            <div ref="table" className={"supertable-tableBody " + (this.state.scrollTop === 0 ? 'is-top' : '')}>
                 <div ref="wrapper" className="supertable-tableBody--wrapper" style={styles.wrapper} onScroll={this.onScroll}>
                     <div style={styles.topBuffer}></div>
                     {_data ? this.renderDataRows(_data) : <Loader />}

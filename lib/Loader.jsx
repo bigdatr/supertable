@@ -5,6 +5,7 @@ const Loader = React.createClass({
     render() {
         return (
             <div className="supertable-loader">
+                {this.props.children}
             </div>
         );
     }

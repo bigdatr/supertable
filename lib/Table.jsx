@@ -4,6 +4,8 @@ import Immutable from 'immutable';
 import Row from './Row';
 import ColumnHeader from './ColumnHeader';
 import TableBody from './TableBody';
+import Loader from './Loader';
+const Transition = React.addons.CSSTransitionGroup;
 
 const Table = React.createClass({
     displayName: 'Table',
@@ -99,7 +101,9 @@ const Table = React.createClass({
         );
     },
     renderLoader() {
-        if (!this.props.loading) { return null; }
+        if (!this.props.loading) { 
+            return null; 
+        }
 
         const styles = {
             wrapper: {
@@ -122,10 +126,14 @@ const Table = React.createClass({
             }
         };
 
+        var defaultLoader = <div style={styles.wrapper}>
+            <div style={styles.loader}>Loading...</div>
+        </div>
+
         return (
-            <div style={styles.wrapper}>
-                <div style={styles.loader}>Loading...</div>
-            </div>
+            <Transition transitionName="supertable-loader">
+                <Loader key="loader">{this.props.loader || defaultLoader}</Loader>
+            </Transition>
         );
     }
 });
