@@ -24,9 +24,9 @@ const TableBody = React.createClass({
         onLoadMore: React.PropTypes.func,
         loading: React.PropTypes.bool
     },
-    mixins: [
-        React.addons.PureRenderMixin
-    ],
+    // mixins: [
+    //     React.addons.PureRenderMixin
+    // ],
     getDefaultProps() {
         return {
             pageSize: 50,
@@ -39,12 +39,7 @@ const TableBody = React.createClass({
     getInitialState() {
         this._position = 0;
         this._isScrolling = false;
-        console.log('setState', {
-            visibleDataIndex: 0,
-            scrollTop: 0,
-            rowsToSkip: 0,
-            numberOfElementsToRender: this.props.pageSize * 2
-        });
+
         return {
             visibleDataIndex: 0,
             scrollTop: 0,
@@ -54,6 +49,40 @@ const TableBody = React.createClass({
     },
     componentDidMount() {
         this._rafUpdate();
+    },
+    shouldComponentUpdate: function(nextProps, nextState) {
+        const currentProps = this.props;
+        const currentState = this.state;
+
+        // If any of these props change, re-render
+        const _props = [
+            'data',
+            'pageSize',
+            'loading',
+            'bufferPages'
+        ];
+
+        const propChanged = _props.find(p => currentProps[p] !== nextProps[p]);
+
+        if (propChanged) { return true; }
+
+        // If any of these state change, re-render
+        const _state = [
+            'visibleDataIndex',
+            'rowsToSkip',
+            'numberOfElementsToRender'
+        ];
+
+        const stateChanged = _state.find(s => currentState[s] !== nextState[s]);
+
+        if (stateChanged) { return true; }
+
+        // scrollTop
+        if (nextState.scrollTop === 0) {
+            return true;
+        }
+
+        return false;
     },
     componentDidUpdate() {
         if (this.props.bufferPages > 0 && this.props.data && this.props.data.size === this.props.pageSize) {
@@ -95,7 +124,7 @@ const TableBody = React.createClass({
         const position = this._position;
         this._lastUpdatePosition = position;
 
-        const firstVisibleRow = (Math.floor(position / this.props.rowHeight)) - (this.props.pageSize);
+        const firstVisibleRow = Math.floor(position / this.props.rowHeight) - this.props.pageSize;
         const lastVisibleRow = Math.ceil(position / this.props.rowHeight);
         const nextIndex = this.state.visibleDataIndex + this.props.pageSize;
         const prevIndex = this.state.visibleDataIndex - this.props.pageSize;
@@ -128,8 +157,6 @@ const TableBody = React.createClass({
         const bufferSize = WindowingHelpers.getBufferSize(pageSize, bufferPages);
         const rowsToSkip = WindowingHelpers.getRowsToSkip(visibleDataIndex, bufferSize);
         const numberOfElementsToRender = WindowingHelpers.getNumberOfElementsToRender(rowsToSkip, bufferSize);
-
-        // console.log('visibleDataIndex', this.state.visibleDataIndex, 'rowsToSkip', rowsToSkip, 'numberOfElementsToRender', numberOfElementsToRender);
 
         return {
             rowsToSkip: rowsToSkip,
