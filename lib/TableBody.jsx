@@ -166,9 +166,11 @@ const TableBody = React.createClass({
     _getData() {
         if (!this.props.data) { return null; }
 
-        return this.props.data
-                    .skip(this.state.rowsToSkip)
-                    .take(this.state.numberOfElementsToRender);
+        return this.props.data;
+
+        // return this.props.data
+        //             .skip(this.state.rowsToSkip)
+        //             .take(this.state.numberOfElementsToRender);
     },
     render() {
         const _data = this._getData();
@@ -179,7 +181,7 @@ const TableBody = React.createClass({
                 width: this.props.width
             },
             topBuffer: {
-                height: this.state.rowsToSkip * this.props.rowHeight
+                // height: this.state.rowsToSkip * this.props.rowHeight
             }
         };
 
