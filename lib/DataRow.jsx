@@ -1,4 +1,4 @@
-import React from 'react/addons';
+import React from 'react';
 import Row from './Row';
 
 const DataRow = React.createClass({

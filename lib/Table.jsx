@@ -1,11 +1,13 @@
-import React from 'react/addons';
+import React from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+const Transition = require('react-addons-css-transition-group');
+
 import Immutable from 'immutable';
 
 import Row from './Row';
 import ColumnHeader from './ColumnHeader';
 import TableBody from './TableBody';
 import Loader from './Loader';
-const Transition = React.addons.CSSTransitionGroup;
 
 const Table = React.createClass({
     displayName: 'Table',
@@ -21,7 +23,7 @@ const Table = React.createClass({
         fields: React.PropTypes.object.isRequired
     },
     mixins: [
-        React.addons.PureRenderMixin
+        PureRenderMixin
     ],
     getDefaultProps() {
         return {

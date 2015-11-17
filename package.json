@@ -16,7 +16,7 @@
     "performance"
   ],
   "author": "Atridge D'Costa",
-  "license": "BSD",
+  "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/bigdatr/supertable/issues"
   },
@@ -42,9 +42,14 @@
     "karma-webpack": "^1.7.0",
     "node-libs-browser": "^0.5.2",
     "phantomjs": "^1.9.17",
+    "react": "^0.14.2",
+    "react-addons-css-transition-group": "^0.14.2",
+    "react-addons-pure-render-mixin": "^0.14.2",
     "webpack": "^1.10.1"
   },
   "peerDependencies": {
-    "react": ">=0.13.3"
+    "react": "^0.14.2",
+    "react-addons-pure-render-mixin": "^0.14.2",
+    "react-addons-css-transition-group": "^0.14.2"
   }
 }
