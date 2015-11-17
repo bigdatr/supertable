@@ -1,6 +1,6 @@
 {
   "name": "supertable",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "React table component",
   "main": "supertable.js",
   "scripts": {
