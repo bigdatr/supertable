@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import DataRow from './DataRow';
 import Loader from './Loader';
@@ -95,7 +96,7 @@ const TableBody = React.createClass({
         }
     },
     onScroll() {
-        const el = this.refs.wrapper.getDOMNode();
+        const el = ReactDOM.findDOMNode(this.refs.wrapper);
         const rect = el.getBoundingClientRect();
         const height = Math.ceil(rect.height);
         const scrollTop = el.scrollTop;
