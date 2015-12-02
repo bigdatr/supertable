@@ -133,7 +133,10 @@ const Table = React.createClass({
         </div>
 
         return (
-            <Transition transitionName="supertable-loader">
+            <Transition 
+                transitionName="supertable-loader"
+                transitionEnterTimeout={300}
+                transitionLeaveTimeout={300}>
                 <Loader key="loader">{this.props.loader || defaultLoader}</Loader>
             </Transition>
         );
