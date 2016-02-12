@@ -95,7 +95,7 @@ const TableBody = React.createClass({
         }
     },
     onScroll() {
-        const el = this.refs.wrapper.getDOMNode();
+        const el = this.refs.wrapper;
         const rect = el.getBoundingClientRect();
         const height = Math.ceil(rect.height);
         const scrollTop = el.scrollTop;
@@ -144,12 +144,16 @@ const TableBody = React.createClass({
             const nextState = this._getDataState(nextVisibleDataIndex);
             nextState.visibleDataIndex = nextVisibleDataIndex < 0 ? 0 : nextVisibleDataIndex;
 
-            this.setState(nextState);
+            if(this.isMounted()) {
+                this.setState(nextState);                
+            }
+        }        
+        
+        if(this.isMounted()) {
+            this.setState({
+                scrollTop: this._scrollTop || 0
+            });
         }
-
-        this.setState({
-            scrollTop: this._scrollTop || 0
-        });
     },
     _getDataState(visibleDataIndex) {
         const {pageSize, bufferPages} = this.props;
