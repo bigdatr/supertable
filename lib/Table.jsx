@@ -115,8 +115,6 @@ const Table = React.createClass({
                 textAlign: 'center'
             },
             loader: {
-                // backgroundColor: '#93619f',
-                // color: '#fff',
                 color: '#93619f',
                 backgroundColor: '#fff',
                 textAlign: 'center',
@@ -133,9 +131,7 @@ const Table = React.createClass({
         </div>
 
         return (
-            <Transition transitionName="supertable-loader">
-                <Loader key="loader">{this.props.loader || defaultLoader}</Loader>
-            </Transition>
+            <Loader key="loader">{this.props.loader || defaultLoader}</Loader>
         );
     }
 });
