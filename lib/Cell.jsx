@@ -9,7 +9,8 @@ const Cell = React.createClass({
             React.PropTypes.element,
             React.PropTypes.string,
             React.PropTypes.number
-        ])
+        ]),
+        title: React.PropTypes.string
     },
     shouldComponentUpdate: function(nextProps) {
         if (nextProps.width !== this.props.width) {
@@ -44,7 +45,7 @@ const Cell = React.createClass({
         };
 
         return (
-            <div className={this.getClassName()} style={styles.col}>
+            <div className={this.getClassName()} title={this.props.title} style={styles.col}>
                 {this.props.label}
             </div>
         );
