@@ -14,12 +14,12 @@ const Table = React.createClass({
     propTypes: {
         data: React.PropTypes.object,
         cellRenderer: React.PropTypes.object,
+        className: React.PropTypes.string,
         headerRenderer: React.PropTypes.object,
         width: React.PropTypes.number.isRequired,
         height: React.PropTypes.number.isRequired,
         rowHeight: React.PropTypes.number.isRequired,
         loading: React.PropTypes.bool,
-
         fields: React.PropTypes.object.isRequired
     },
     mixins: [
@@ -27,6 +27,7 @@ const Table = React.createClass({
     ],
     getDefaultProps() {
         return {
+            className: '',
             loading: false,
             headerRenderer: Immutable.Map()
         };
@@ -70,7 +71,7 @@ const Table = React.createClass({
         const _widths = this.getWidths();
 
         return (
-            <div className="supertable-container">
+            <div className={`supertable-container ${this.props.className}`}>
                 {this.renderLoader()}
                 <div className="supertable">
                     <div className="supertable-wrapper">
