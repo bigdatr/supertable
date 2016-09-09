@@ -6,12 +6,14 @@ const ColumnHeader = React.createClass({
     propTypes: {
         label: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
         width: React.PropTypes.number.isRequired,
-        title: React.PropTypes.string
+        title: React.PropTypes.string,
+        field: React.PropTypes.string
     },
     getDefaultProps() {
         return {
             label: '',
-            title: ''
+            title: '',
+            field: ''
         };
     },
     shouldComponentUpdate(nextProps) {
@@ -25,16 +27,16 @@ const ColumnHeader = React.createClass({
         return false;
     },
     render() {
-        return (
-            <Cell className="supertable-columnHeader" width={this.props.width} label={this.renderLabel()} title={this.props.title} />
-        );
+        const {field} = this.props;
+        return <Cell 
+            className={`supertable-columnHeader supertable-columnHeader-${field}`}
+            width={this.props.width} 
+            label={this.renderLabel()} 
+            title={this.props.title} 
+        />;
     },
     renderLabel() {
-        return (
-            <div title={this.props.title}>
-                {this.props.label}
-            </div>
-        );
+        return <div title={this.props.title}>{this.props.label}</div>;
     }
 });
 

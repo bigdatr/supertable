@@ -94,7 +94,7 @@ const Table = React.createClass({
                 label = headerRenderer.get(field)(f);
             }
 
-            return <ColumnHeader key={field} label={label} width={widths[i]} />;
+            return <ColumnHeader key={field} label={label} width={widths[i]} field={field}/>;
         });
 
         return (
