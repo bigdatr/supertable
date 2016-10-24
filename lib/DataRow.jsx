@@ -1,5 +1,6 @@
 import React from 'react';
 import Row from './Row';
+import {List} from 'immutable';
 
 const DataRow = React.createClass({
     displayName: 'DataRow',
@@ -17,10 +18,15 @@ const DataRow = React.createClass({
         };
     },
     shouldComponentUpdate(nextProps) {
-        if (nextProps.rowData !== this.props.rowData) {
+        const {rowData, fields, cellWidth} = this.props;
+
+        if (nextProps.rowData !== rowData) {
             return true;
         }
-        else if (nextProps.fields !== this.props.fields) {
+        else if (nextProps.fields !== fields) {
+            return true;
+        }
+        else if (!List(nextProps.cellWidth).equals(List(cellWidth))) {
             return true;
         }
 
