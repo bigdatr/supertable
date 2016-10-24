@@ -202,15 +202,15 @@ const TableBody = React.createClass({
         const {fields, cellRenderer, rowHeight, cellWidth} = this.props;
 
         return data.map((d, i) => {
-            return (
-                <DataRow key={i}
-                        rowIndex={i}
-                        rowData={d}
-                        fields={fields}
-                        cellWidth={cellWidth}
-                        cellRenderer={cellRenderer}
-                        rowHeight={rowHeight} />
-            );
+            return <DataRow 
+                key={i}
+                rowIndex={i}
+                rowData={d}
+                fields={fields}
+                cellWidth={cellWidth}
+                cellRenderer={cellRenderer}
+                rowHeight={rowHeight} 
+            />;
         }).toJS();
     }
 });

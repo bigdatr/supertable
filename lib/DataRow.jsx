@@ -40,31 +40,29 @@ const DataRow = React.createClass({
         return row;
     },
     renderCells() {
-        const {rowData, cellRenderer} = this.props;
-        const _widths = this.props.cellWidth;
+        const {rowData, cellRenderer, cellWidth} = this.props;
 
         return this.props.fields
-                        .map((f, i) => {
-                            const fieldName = f.get('name');
-                            let raw = rowData.get(fieldName);
+            .map((f, i) => {
+                const fieldName = f.get('name');
+                let raw = rowData.get(fieldName);
 
-                            // Convert Immutable object to plain js
-                            if (raw && raw.toJS) { raw = raw.toJS(); }
+                // Convert Immutable object to plain js
+                if (raw && raw.toJS) { 
+                    raw = raw.toJS(); 
+                }
 
-                            // Automatically convert arrays to comma seperated strings
-                            if (typeof raw === 'object' && raw.length) { raw = raw.join(', '); }
+                // Automatically convert arrays to comma seperated strings
+                if (typeof raw === 'object' && raw.length) { 
+                    raw = raw.join(', '); 
+                }
 
-                            const val = cellRenderer.has(fieldName) ? cellRenderer.get(fieldName)(rowData) : raw;
-                            const cellWidth = _widths[i];
+                const val = cellRenderer.has(fieldName) 
+                    ? cellRenderer.get(fieldName)(rowData) 
+                    : raw;
 
-                            const cell = (
-                                <div key={i} className="supertable-cell" style={{width: cellWidth}}>
-                                    {val}
-                                </div>
-                            );
-
-                            return cell;
-                        });
+                return <div key={i} className="supertable-cell" style={{width: cellWidth[i]}}>{val}</div>;
+            });
     }
 });
 

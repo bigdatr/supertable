@@ -12,7 +12,7 @@ const Cell = React.createClass({
         ]),
         title: React.PropTypes.string
     },
-    shouldComponentUpdate: function(nextProps) {
+    shouldComponentUpdate(nextProps) {
         if (nextProps.width !== this.props.width) {
             return true;
         }
